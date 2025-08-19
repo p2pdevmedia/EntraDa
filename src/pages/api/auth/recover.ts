@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { prisma } from '../../../lib/prisma';
 import { hashPassword } from '../../../lib/auth';
+import { sendPasswordResetEmail, type Locale } from '../../../lib/email';
 import crypto from 'crypto';
 import { rateLimiters, getClientId } from '../../../lib/rateLimit';
 
@@ -13,11 +14,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   if (req.method === 'POST') {
+
     const { email } = req.body;
     if (!email) {
       rateLimiters.recover.fail(key);
       return res.status(400).json({ message: 'Email required' });
     }
+
+
+    const locale: Locale = lang === 'es' ? 'es' : 'en';
 
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
@@ -32,7 +37,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       data: { resetToken: token, resetTokenExp }
     });
 
+
     rateLimiters.recover.succeed(key);
+    await sendPasswordResetEmail(email, token, locale);
+
     return res.status(200).json({ message: 'Reset token generated', token });
   } else if (req.method === 'PUT') {
     const { token, password } = req.body;
