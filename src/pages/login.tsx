@@ -15,7 +15,11 @@ export default function Login() {
       body: JSON.stringify({ email, password })
     });
     const data = await res.json();
-    setMessage(res.ok ? 'Logged in' : data.message);
+    if (res.ok) {
+      window.location.href = '/dashboard';
+    } else {
+      setMessage(data.message);
+    }
   };
 
   return (
