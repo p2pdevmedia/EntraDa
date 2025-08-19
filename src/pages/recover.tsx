@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import Input from '../components/Input';
+import Button from '../components/Button';
 
 export default function Recover() {
   const [email, setEmail] = useState('');
@@ -29,18 +31,18 @@ export default function Recover() {
   };
 
   return (
-    <div>
-      <h1>Recover Password</h1>
-      <form onSubmit={requestToken}>
-        <input value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" />
-        <button type="submit">Send Token</button>
+    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow">
+      <h1 className="text-2xl font-bold mb-4">Recover Password</h1>
+      <form onSubmit={requestToken} className="mb-6">
+        <Input value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" />
+        <Button type="submit">Send Token</Button>
       </form>
       <form onSubmit={resetPassword}>
-        <input value={token} onChange={e => setToken(e.target.value)} placeholder="Token" />
-        <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="New Password" />
-        <button type="submit">Reset Password</button>
+        <Input value={token} onChange={e => setToken(e.target.value)} placeholder="Token" />
+        <Input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="New Password" />
+        <Button type="submit">Reset Password</Button>
       </form>
-      <p>{message}</p>
+      {message && <p className="mt-4 text-center text-sm text-gray-600">{message}</p>}
     </div>
   );
 }

@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import Input from '../components/Input';
+import Select from '../components/Select';
+import Button from '../components/Button';
 
 export default function Signup() {
   const [email, setEmail] = useState('');
@@ -18,20 +21,20 @@ export default function Signup() {
   };
 
   return (
-    <div>
-      <h1>Signup</h1>
+    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow">
+      <h1 className="text-2xl font-bold mb-4">Signup</h1>
       <form onSubmit={submit}>
-        <input value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" />
-        <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" />
-        <select value={role} onChange={e => setRole(e.target.value)}>
+        <Input value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" />
+        <Input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" />
+        <Select value={role} onChange={e => setRole(e.target.value)}>
           <option value="CLIENT">Client</option>
           <option value="EVENT_MANAGER">Event Manager</option>
           <option value="EVENT_RRPP">Event RRPP</option>
           <option value="ADMIN">Admin</option>
-        </select>
-        <button type="submit">Signup</button>
+        </Select>
+        <Button type="submit">Signup</Button>
       </form>
-      <p>{message}</p>
+      {message && <p className="mt-4 text-center text-sm text-gray-600">{message}</p>}
     </div>
   );
 }
