@@ -5,30 +5,39 @@ import { Role } from '@prisma/client';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const user = await getSessionUser(req);
-  if (!user) return res.status(401).json({ message: 'Unauthorized' });
 
   if (req.method === 'GET') {
-    if (user.role !== Role.ADMIN && user.role !== Role.EVENT_MANAGER) {
+    const where =
+      user && user.role === Role.EVENT_MANAGER ? { managerId: user.id } : {};
+
+    if (user && user.role !== Role.ADMIN && user.role !== Role.EVENT_MANAGER) {
       return res.status(403).json({ message: 'Forbidden' });
     }
 
-    const where =
-      user.role === Role.EVENT_MANAGER ? { managerId: user.id } : {};
+    const select = user
+      ? {
+          id: true,
+          name: true,
+          mercadoPagoAccount: true,
+          posterUrl: true,
+          sliderUrl: true,
+          miniUrl: true,
+        }
+      : { id: true, name: true, posterUrl: true };
 
-    const events = await prisma.event.findMany({
-      where,
-      select: { id: true, name: true, mercadoPagoAccount: true }
-    });
+    const events = await prisma.event.findMany({ where, select });
 
     return res.status(200).json(events);
   }
+
+  if (!user) return res.status(401).json({ message: 'Unauthorized' });
 
   if (req.method === 'PUT') {
     if (user.role !== Role.ADMIN && user.role !== Role.EVENT_MANAGER) {
       return res.status(403).json({ message: 'Forbidden' });
     }
 
-    const { id, name, mercadoPagoAccount } = req.body;
+    const { id, name, mercadoPagoAccount, posterUrl, sliderUrl, miniUrl } = req.body;
     if (typeof id !== 'number') {
       return res.status(400).json({ message: 'Invalid payload' });
     }
@@ -42,8 +51,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const updated = await prisma.event.update({
       where: { id },
-      data: { name, mercadoPagoAccount },
-      select: { id: true, name: true, mercadoPagoAccount: true }
+      data: { name, mercadoPagoAccount, posterUrl, sliderUrl, miniUrl },
+      select: {
+        id: true,
+        name: true,
+        mercadoPagoAccount: true,
+        posterUrl: true,
+        sliderUrl: true,
+        miniUrl: true,
+      },
     });
 
     return res.status(200).json(updated);
@@ -54,7 +70,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(403).json({ message: 'Forbidden' });
     }
 
-    const { name, tickets, mercadoPagoAccount } = req.body;
+    const { name, tickets, mercadoPagoAccount, posterUrl, sliderUrl, miniUrl } = req.body;
     if (!name || !mercadoPagoAccount || !Array.isArray(tickets)) {
       return res.status(400).json({ message: 'Invalid payload' });
     }
@@ -75,16 +91,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         name,
         managerId: user.id,
         mercadoPagoAccount,
+        posterUrl,
+        sliderUrl,
+        miniUrl,
         tickets: {
           create: tickets.map((t: any) => ({
             ticketTypeId: t.ticketTypeId,
             quantity: t.quantity,
             saleStart: new Date(t.saleStart),
-            saleEnd: new Date(t.saleEnd)
-          }))
-        }
+            saleEnd: new Date(t.saleEnd),
+          })),
+        },
       },
-      include: { tickets: true }
+      include: { tickets: true },
     });
 
     return res.status(201).json(event);
