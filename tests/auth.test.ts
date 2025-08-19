@@ -44,7 +44,7 @@ const users: any[] = [];
   create: async ({ data }: any) => {
     const user = { id: users.length + 1, ...data };
     users.push(user);
-    return { id: user.id, email: user.email, passwordHash: user.passwordHash };
+    return { id: user.id, email: user.email, passwordHash: user.passwordHash, role: user.role };
   },
 };
 
@@ -56,7 +56,7 @@ test('signup creates new user', async () => {
   });
   await signupHandler(req, res);
   assert.equal(res.getStatus(), 201);
-  assert.deepEqual(res.getJSON(), { id: 1, email: 'a@a.com' });
+  assert.deepEqual(res.getJSON(), { id: 1, email: 'a@a.com', role: 'CLIENT' });
 });
 
 test('signup fails if user exists', async () => {
