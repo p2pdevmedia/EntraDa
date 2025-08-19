@@ -98,9 +98,9 @@ export default function TopBar() {
   };
 
   return (
-    <nav className="fixed top-4 inset-x-0 z-50 flex justify-center pointer-events-none">
+    <nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 pointer-events-none">
       <div
-        className="flex items-center justify-between gap-6 px-6 py-2 bg-black/60 backdrop-blur-md border border-white/10 text-white rounded-full pointer-events-auto shadow-lg max-w-5xl w-full mx-auto"
+        className="flex items-center justify-between gap-6 px-6 py-2 bg-black/60 backdrop-blur-md border border-white/10 text-white rounded-full pointer-events-auto shadow-lg max-w-5xl w-full"
       >
         <Link
           href="/"
