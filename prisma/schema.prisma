@@ -16,4 +16,42 @@ model User {
   resetToken    String?  @unique
   resetTokenExp DateTime?
   createdAt     DateTime @default(now())
+  role          Role     @default(CLIENT)
+  events        Event[]  @relation("EventManagerEvents")
+  ticketTypes   TicketType[] @relation("TicketTypeCreator")
+}
+
+enum Role {
+  ADMIN
+  EVENT_MANAGER
+  EVENT_RRPP
+  CLIENT
+}
+
+model Event {
+  id        Int    @id @default(autoincrement())
+  name      String
+  manager   User   @relation("EventManagerEvents", fields: [managerId], references: [id])
+  managerId Int
+  tickets   EventTicket[]
+}
+
+model TicketType {
+  id        Int    @id @default(autoincrement())
+  name      String
+  price     Float
+  creator   User   @relation("TicketTypeCreator", fields: [creatorId], references: [id])
+  creatorId Int
+  events    EventTicket[]
+}
+
+model EventTicket {
+  id           Int        @id @default(autoincrement())
+  event        Event      @relation(fields: [eventId], references: [id])
+  eventId      Int
+  ticketType   TicketType @relation(fields: [ticketTypeId], references: [id])
+  ticketTypeId Int
+  quantity     Int
+  saleStart    DateTime
+  saleEnd      DateTime
 }
