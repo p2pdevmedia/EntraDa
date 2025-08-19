@@ -15,10 +15,10 @@ export default function Dashboard({ user }: DashboardProps) {
   const [posterUrl, setPosterUrl] = useState('');
   const [sliderUrl, setSliderUrl] = useState('');
   const [miniUrl, setMiniUrl] = useState('');
-  const [ticketName, setTicketName] = useState('');
-  const [ticketPrice, setTicketPrice] = useState('');
-  const [ticketQuantity, setTicketQuantity] = useState('');
-  const [ticketSaleStart, setTicketSaleStart] = useState('');
+  type TicketInput = { name: string; price: string; quantity: string; saleStart: string };
+  const [tickets, setTickets] = useState<TicketInput[]>([
+    { name: '', price: '', quantity: '', saleStart: '' },
+  ]);
   const [message, setMessage] = useState('');
   const [users, setUsers] = useState<any[]>([]);
 
@@ -34,14 +34,12 @@ export default function Dashboard({ user }: DashboardProps) {
         posterUrl,
         sliderUrl,
         miniUrl,
-        tickets: [
-          {
-            name: ticketName,
-            price: Number(ticketPrice),
-            quantity: Number(ticketQuantity),
-            saleStart: ticketSaleStart,
-          },
-        ],
+        tickets: tickets.map(t => ({
+          name: t.name,
+          price: Number(t.price),
+          quantity: Number(t.quantity),
+          saleStart: t.saleStart,
+        })),
       }),
     });
     const data = await res.json();
@@ -72,13 +70,66 @@ export default function Dashboard({ user }: DashboardProps) {
             <Input value={posterUrl} onChange={e => setPosterUrl(e.target.value)} placeholder="Poster URL" />
             <Input value={sliderUrl} onChange={e => setSliderUrl(e.target.value)} placeholder="Slider URL" />
             <Input value={miniUrl} onChange={e => setMiniUrl(e.target.value)} placeholder="Mini URL" />
-            <div className="mt-4">
-              <h3 className="font-semibold mb-2">Ticket Type</h3>
-              <Input value={ticketName} onChange={e => setTicketName(e.target.value)} placeholder="Ticket name" />
-              <Input type="number" value={ticketPrice} onChange={e => setTicketPrice(e.target.value)} placeholder="Price" />
-              <Input type="number" value={ticketQuantity} onChange={e => setTicketQuantity(e.target.value)} placeholder="Quantity" />
-              <Input type="date" value={ticketSaleStart} onChange={e => setTicketSaleStart(e.target.value)} placeholder="Sale start" />
-            </div>
+            {tickets.map((ticket, index) => (
+              <div key={index} className="mt-4">
+                <h3 className="font-semibold mb-2">Ticket Type {index + 1}</h3>
+                <Input
+                  value={ticket.name}
+                  onChange={e => {
+                    const updated = [...tickets];
+                    updated[index].name = e.target.value;
+                    setTickets(updated);
+                  }}
+                  placeholder="Ticket name"
+                />
+                <Input
+                  type="number"
+                  value={ticket.price}
+                  onChange={e => {
+                    const updated = [...tickets];
+                    updated[index].price = e.target.value;
+                    setTickets(updated);
+                  }}
+                  placeholder="Price"
+                />
+                <Input
+                  type="number"
+                  value={ticket.quantity}
+                  onChange={e => {
+                    const updated = [...tickets];
+                    updated[index].quantity = e.target.value;
+                    setTickets(updated);
+                  }}
+                  placeholder="Quantity"
+                />
+                <Input
+                  type="date"
+                  value={ticket.saleStart}
+                  onChange={e => {
+                    const updated = [...tickets];
+                    updated[index].saleStart = e.target.value;
+                    setTickets(updated);
+                  }}
+                  placeholder="Sale start"
+                />
+                {tickets.length > 1 && (
+                  <button
+                    type="button"
+                    className="text-sm text-red-500 mb-4"
+                    onClick={() => setTickets(tickets.filter((_, i) => i !== index))}
+                  >
+                    Remove ticket type
+                  </button>
+                )}
+              </div>
+            ))}
+            <button
+              type="button"
+              className="text-sm text-blue-500 mb-4"
+              onClick={() => setTickets([...tickets, { name: '', price: '', quantity: '', saleStart: '' }])}
+            >
+              Add ticket type
+            </button>
             <Button type="submit">Create</Button>
           </form>
           {message && <p className="mt-2 text-sm text-gray-600">{message}</p>}
