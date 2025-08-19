@@ -1,0 +1,25 @@
+{
+  "name": "entrada",
+  "version": "1.0.0",
+  "description": "Simple Next.js app with auth and Prisma",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "echo \"No tests\" && exit 0"
+  },
+  "dependencies": {
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "@prisma/client": "latest",
+    "prisma": "latest",
+    "bcryptjs": "latest"
+  },
+  "devDependencies": {
+    "typescript": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "@types/node": "latest"
+  }
+}
