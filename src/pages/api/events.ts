@@ -26,7 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           sliderUrl: true,
           miniUrl: true,
         }
-      : { id: true, name: true, posterUrl: true };
+      : { id: true, name: true, posterUrl: true, sliderUrl: true };
 
     const events = await prisma.event.findMany({ where, select });
 

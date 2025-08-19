@@ -4,6 +4,7 @@ interface Event {
   id: number;
   name: string;
   posterUrl?: string;
+  sliderUrl?: string;
 }
 
 export default function Home() {
@@ -17,6 +18,15 @@ export default function Home() {
       .catch(() => setEvents([]));
   }, []);
 
+  useEffect(() => {
+    if (events.length > 1) {
+      const id = setInterval(() => {
+        setCurrent(c => (c + 1) % events.length);
+      }, 3000);
+      return () => clearInterval(id);
+    }
+  }, [events.length]);
+
   const next = () => setCurrent((current + 1) % events.length);
   const prev = () => setCurrent((current - 1 + events.length) % events.length);
 
@@ -24,13 +34,18 @@ export default function Home() {
     <>
       {events.length > 0 && (
         <div className="relative w-full h-64 overflow-hidden mb-8">
-          {events[current].posterUrl && (
-            <img
-              src={events[current].posterUrl || ''}
-              alt={events[current].name}
-              className="w-full h-full object-cover"
-            />
-          )}
+          {events.map((ev, idx) => (
+            ev.sliderUrl || ev.posterUrl ? (
+              <img
+                key={ev.id}
+                src={ev.sliderUrl || ev.posterUrl || ''}
+                alt={ev.name}
+                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+                  idx === current ? 'opacity-100' : 'opacity-0'
+                }`}
+              />
+            ) : null
+          ))}
           {events.length > 1 && (
             <>
               <button
