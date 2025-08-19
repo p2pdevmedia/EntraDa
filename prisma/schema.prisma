@@ -1,0 +1,19 @@
+// Prisma schema for User model
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            Int      @id @default(autoincrement())
+  email         String   @unique
+  passwordHash  String
+  resetToken    String?  @unique
+  resetTokenExp DateTime?
+  createdAt     DateTime @default(now())
+}

@@ -1,3 +1,11 @@
 # EntraDa
 
-NEXT con un backeend con una manejo simple de login logout recover password  y signup,  Usara una base de datos postgres Prisma para el manejo de modelos y todo en typescript 
+Simple Next.js app with authentication (signup, login, logout, password recovery) using Prisma and PostgreSQL. Everything is written in TypeScript.
+
+## Scripts
+
+- `npm run dev` – start development server
+- `npm run build` – build application
+- `npm start` – start production server
+
+Set a `DATABASE_URL` environment variable pointing to your PostgreSQL instance before running Prisma commands.
