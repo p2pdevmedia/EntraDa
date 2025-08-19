@@ -4,7 +4,7 @@
   "description": "Simple Next.js app with auth and Prisma",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "test": "echo \"No tests\" && exit 0"
   },
