@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "echo \"No tests\" && exit 0"
+    "test": "tsc -p tsconfig.test.json && node --test build/tests/auth.test.js"
   },
   "dependencies": {
     "next": "latest",
