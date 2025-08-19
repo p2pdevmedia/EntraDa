@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import Input from '../components/Input';
+import Button from '../components/Button';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -17,14 +19,14 @@ export default function Login() {
   };
 
   return (
-    <div>
-      <h1>Login</h1>
+    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow">
+      <h1 className="text-2xl font-bold mb-4">Login</h1>
       <form onSubmit={submit}>
-        <input value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" />
-        <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" />
-        <button type="submit">Login</button>
+        <Input value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" />
+        <Input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" />
+        <Button type="submit">Login</Button>
       </form>
-      <p>{message}</p>
+      {message && <p className="mt-4 text-center text-sm text-gray-600">{message}</p>}
     </div>
   );
 }

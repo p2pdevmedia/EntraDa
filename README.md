@@ -1,6 +1,6 @@
 # EntraDa
 
-Simple Next.js app with authentication (signup, login, logout, password recovery) using Prisma and PostgreSQL. Everything is written in TypeScript.
+Simple Next.js app with authentication (signup, login, logout, password recovery) using Prisma and PostgreSQL. Everything is written in TypeScript and styled with Tailwind CSS.
 
 ## Scripts
 
