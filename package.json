@@ -22,7 +22,6 @@
     "@types/react-dom": "latest",
     "@types/node": "latest",
     "tailwindcss": "latest",
-    "postcss": "latest",
-    "autoprefixer": "latest"
+    "@tailwindcss/postcss": "latest"
   }
 }
