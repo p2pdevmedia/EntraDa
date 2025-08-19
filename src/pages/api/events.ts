@@ -11,7 +11,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(403).json({ message: 'Forbidden' });
   }
 
-  const { name, tickets, mercadoPagoAccount } = req.body;
+  const { name, tickets, mercadoPagoAccount, posterUrl, sliderUrl, miniUrl } = req.body;
   if (!name || !mercadoPagoAccount || !Array.isArray(tickets)) {
     return res.status(400).json({ message: 'Invalid payload' });
   }
@@ -32,6 +32,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       name,
       managerId: user.id,
       mercadoPagoAccount,
+      posterUrl,
+      sliderUrl,
+      miniUrl,
       tickets: {
         create: tickets.map((t: any) => ({
           ticketTypeId: t.ticketTypeId,

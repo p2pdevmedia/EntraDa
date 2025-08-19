@@ -1,6 +1,23 @@
-export default function Home() {
+import type { GetServerSideProps } from 'next';
+import EventSlider from '../components/EventSlider';
+import { prisma } from '../lib/prisma';
+
+interface HomeProps {
+  sliderImages: string[];
+}
+
+export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
+  const events = await prisma.event.findMany({
+    select: { sliderUrl: true },
+    where: { sliderUrl: { not: null } },
+  });
+  return { props: { sliderImages: events.map((e) => e.sliderUrl as string) } };
+};
+
+export default function Home({ sliderImages }: HomeProps) {
   return (
     <>
+      <EventSlider images={sliderImages} />
       <header className="hero">
         <h1>Bienvenido a EntraDa</h1>
         <p>Soluciones innovadoras de autenticación y gestión de usuarios.</p>
