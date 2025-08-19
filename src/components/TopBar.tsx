@@ -39,13 +39,6 @@ export default function TopBar() {
           Eventos
         </Link>,
         <Link
-          key="ticket-types"
-          href="/ticket-types"
-          className="hover:text-blue-400 transition"
-        >
-          Tipos de entradas
-        </Link>,
-        <Link
           key="users"
           href="/users"
           className="hover:text-blue-400 transition"
