@@ -20,7 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(400).json({ message: 'Email required' });
     }
 
-
+    const lang = typeof req.query.lang === 'string' ? req.query.lang : undefined;
     const locale: Locale = lang === 'es' ? 'es' : 'en';
 
     const user = await prisma.user.findUnique({ where: { email } });
