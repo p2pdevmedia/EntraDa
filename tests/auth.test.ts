@@ -2,12 +2,16 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import signupHandler from '../src/pages/api/auth/signup';
 import loginHandler from '../src/pages/api/auth/login';
+
+import meHandler from '../src/pages/api/auth/me';
+
 import recoverHandler from '../src/pages/api/auth/recover';
+
 import { prisma } from '../src/lib/prisma';
 import { rateLimiters } from '../src/lib/rateLimit';
 
-function createMockReqRes({ method = 'GET', body = {} } = {}) {
-  const req = { method, body } as any;
+function createMockReqRes({ method = 'GET', body = {}, cookies = {} } = {}) {
+  const req = { method, body, cookies } as any;
   let statusCode = 200;
   let jsonData: any;
   const headers: Record<string, string[]> = {};
@@ -41,8 +45,8 @@ function createMockReqRes({ method = 'GET', body = {} } = {}) {
 
 const users: any[] = [];
 (prisma as any).user = {
-  findUnique: async ({ where: { email } }: any) =>
-    users.find((u) => u.email === email) || null,
+  findUnique: async ({ where }: any) =>
+    users.find((u) => (where.email ? u.email === where.email : u.id === where.id)) || null,
   create: async ({ data }: any) => {
     const user = { id: users.length + 1, ...data };
     users.push(user);
@@ -130,6 +134,27 @@ test('login fails with wrong password', async () => {
   await loginHandler(req, res);
   assert.equal(res.getStatus(), 401);
 });
+
+
+test('me returns null when not authenticated', async () => {
+  const { req, res } = createMockReqRes();
+  await meHandler(req, res);
+  assert.equal(res.getStatus(), 200);
+  assert.deepEqual(res.getJSON(), { user: null });
+});
+
+test('me returns user when session cookie present', async () => {
+  users.length = 0;
+  const { req: sReq, res: sRes } = createMockReqRes({
+    method: 'POST',
+    body: { email: 'd@d.com', password: 'secret' },
+  });
+  await signupHandler(sReq, sRes);
+
+  const { req, res } = createMockReqRes({ cookies: { session: '1' } });
+  await meHandler(req, res);
+  assert.equal(res.getStatus(), 200);
+  assert.deepEqual(res.getJSON(), { user: { id: 1, email: 'd@d.com', role: 'CLIENT' } });
 
 test('login locks after multiple failed attempts', async () => {
   users.length = 0;
