@@ -11,6 +11,9 @@ interface DashboardProps {
 export default function Dashboard({ user }: DashboardProps) {
   const [name, setName] = useState('');
   const [mpAccount, setMpAccount] = useState('');
+  const [posterUrl, setPosterUrl] = useState('');
+  const [sliderUrl, setSliderUrl] = useState('');
+  const [miniUrl, setMiniUrl] = useState('');
   const [message, setMessage] = useState('');
   const [users, setUsers] = useState<any[]>([]);
 
@@ -19,7 +22,14 @@ export default function Dashboard({ user }: DashboardProps) {
     const res = await fetch('/api/events', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, mercadoPagoAccount: mpAccount, tickets: [] })
+      body: JSON.stringify({
+        name,
+        mercadoPagoAccount: mpAccount,
+        posterUrl,
+        sliderUrl,
+        miniUrl,
+        tickets: [],
+      }),
     });
     const data = await res.json();
     setMessage(res.ok ? 'Event created' : data.message);
@@ -45,6 +55,9 @@ export default function Dashboard({ user }: DashboardProps) {
           <form onSubmit={createEvent}>
             <Input value={name} onChange={e => setName(e.target.value)} placeholder="Event name" />
             <Input value={mpAccount} onChange={e => setMpAccount(e.target.value)} placeholder="MercadoPago account" />
+            <Input value={posterUrl} onChange={e => setPosterUrl(e.target.value)} placeholder="Poster URL" />
+            <Input value={sliderUrl} onChange={e => setSliderUrl(e.target.value)} placeholder="Slider URL" />
+            <Input value={miniUrl} onChange={e => setMiniUrl(e.target.value)} placeholder="Mini URL" />
             <Button type="submit">Create</Button>
           </form>
           {message && <p className="mt-2 text-sm text-gray-600">{message}</p>}

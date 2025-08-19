@@ -29,14 +29,10 @@ export default function Navbar({
   const authenticatedItems: NavItem[] = [
     { href: '/dashboard', label: 'Dashboard' },
     { href: '/events', label: 'Eventos' },
+    ...(isAdmin ? [{ href: '/users', label: 'Usuarios' }] : []),
     { href: '/ticket-types', label: 'Tipos de Entradas' },
+    { label: 'Logout', type: 'button', onClick: onLogout },
   ];
-
-  if (isAdmin) {
-    authenticatedItems.push({ href: '/users', label: 'Usuarios' });
-  }
-
-  authenticatedItems.push({ label: 'Logout', type: 'button', onClick: onLogout });
 
   const navItems = isAuthenticated ? authenticatedItems : guestItems;
 
