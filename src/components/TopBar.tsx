@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 
 interface User {
   id: number;
@@ -35,7 +35,7 @@ export default function TopBar() {
       ];
     }
 
-    const links = [] as JSX.Element[];
+    const links: ReactNode[] = [];
     if (user.role === 'ADMIN') {
       links.push(
         <Link key="events" href="/events" className="hover:underline">Eventos</Link>
