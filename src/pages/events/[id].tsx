@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 interface Event {
   id: number;
   name: string;
+  date: string;
   mercadoPagoAccount: string;
   posterUrl?: string;
   sliderUrl?: string;
@@ -59,6 +60,12 @@ export default function EditEvent() {
           className="border p-1 w-full"
           value={event.name}
           onChange={e => handleChange('name', e.target.value)}
+        />
+        <input
+          type="date"
+          className="border p-1 w-full"
+          value={event.date ? event.date.split('T')[0] : ''}
+          onChange={e => handleChange('date', e.target.value)}
         />
         <input
           className="border p-1 w-full"

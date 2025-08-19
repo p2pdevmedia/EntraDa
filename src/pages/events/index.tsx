@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 interface Event {
   id: number;
   name: string;
+  date: string;
   mercadoPagoAccount: string;
   posterUrl?: string;
   sliderUrl?: string;
@@ -46,6 +47,7 @@ export default function EventsPage() {
         <thead>
           <tr>
             <th className="text-left p-2">Nombre</th>
+            <th className="text-left p-2">Fecha</th>
             <th className="text-left p-2">Cuenta MP</th>
             <th className="text-left p-2">Poster</th>
             <th className="text-left p-2">Slider</th>
@@ -57,6 +59,7 @@ export default function EventsPage() {
           {events.map(ev => (
             <tr key={ev.id}>
               <td className="p-2">{ev.name}</td>
+              <td className="p-2">{new Date(ev.date).toLocaleDateString()}</td>
               <td className="p-2">{ev.mercadoPagoAccount}</td>
               <td className="p-2">
                 {ev.posterUrl && (
