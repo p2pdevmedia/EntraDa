@@ -4,6 +4,7 @@ interface Event {
   id: number;
   name: string;
   posterUrl?: string;
+  date?: string;
   sliderUrl?: string;
 }
 

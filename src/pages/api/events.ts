@@ -21,6 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       ? {
           id: true,
           name: true,
+          date: true,
           mercadoPagoAccount: true,
           posterUrl: true,
           sliderUrl: true,
@@ -44,8 +45,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(403).json({ message: 'Forbidden' });
     }
 
-    const { id, name, mercadoPagoAccount, posterUrl, sliderUrl, miniUrl } = req.body;
-    if (typeof id !== 'number') {
+    const { id, name, date, mercadoPagoAccount, posterUrl, sliderUrl, miniUrl } = req.body;
+    if (typeof id !== 'number' || !date) {
       return res.status(400).json({ message: 'Invalid payload' });
     }
 
@@ -58,10 +59,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const updated = await prisma.event.update({
       where: { id },
-      data: { name, mercadoPagoAccount, posterUrl, sliderUrl, miniUrl },
+      data: { name, date: new Date(date), mercadoPagoAccount, posterUrl, sliderUrl, miniUrl },
       select: {
         id: true,
         name: true,
+        date: true,
         mercadoPagoAccount: true,
         posterUrl: true,
         sliderUrl: true,
@@ -77,17 +79,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(403).json({ message: 'Forbidden' });
     }
 
-    const { name, tickets, mercadoPagoAccount, posterUrl, sliderUrl, miniUrl } = req.body;
-    if (!name || !mercadoPagoAccount || !Array.isArray(tickets)) {
+    const { name, date, tickets, mercadoPagoAccount, posterUrl, sliderUrl, miniUrl } = req.body;
+    if (!name || !date || !mercadoPagoAccount || !Array.isArray(tickets)) {
       return res.status(400).json({ message: 'Invalid payload' });
     }
 
     for (const t of tickets) {
       if (
-        typeof t.ticketTypeId !== 'number' ||
+        !t.name ||
+        typeof t.price !== 'number' ||
         typeof t.quantity !== 'number' ||
-        !t.saleStart ||
-        !t.saleEnd
+        !t.saleStart
       ) {
         return res.status(400).json({ message: 'Invalid ticket specification' });
       }
@@ -96,6 +98,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const event = await prisma.event.create({
       data: {
         name,
+        date: new Date(date),
         managerId: user.id,
         mercadoPagoAccount,
         posterUrl,
@@ -103,10 +106,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         miniUrl,
         tickets: {
           create: tickets.map((t: any) => ({
-            ticketTypeId: t.ticketTypeId,
             quantity: t.quantity,
             saleStart: new Date(t.saleStart),
-            saleEnd: new Date(t.saleEnd),
+            saleEnd: new Date(date),
+            ticketType: {
+              create: {
+                name: t.name,
+                price: t.price,
+                creatorId: user.id,
+              },
+            },
           })),
         },
       },

@@ -33,6 +33,7 @@ enum Role {
 model Event {
   id        Int    @id @default(autoincrement())
   name      String
+  date      DateTime
   manager   User   @relation("EventManagerEvents", fields: [managerId], references: [id])
   managerId Int
   mercadoPagoAccount String
