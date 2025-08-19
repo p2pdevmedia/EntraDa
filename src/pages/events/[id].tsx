@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import DatePicker from '../../components/DatePicker';
 
 interface Event {
   id: number;
@@ -61,9 +62,7 @@ export default function EditEvent() {
           value={event.name}
           onChange={e => handleChange('name', e.target.value)}
         />
-        <input
-          type="date"
-          className="border p-1 w-full"
+        <DatePicker
           value={event.date ? event.date.split('T')[0] : ''}
           onChange={e => handleChange('date', e.target.value)}
         />

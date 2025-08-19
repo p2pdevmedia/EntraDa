@@ -3,6 +3,7 @@ import { getSessionUser } from '../lib/session';
 import { useEffect, useState } from 'react';
 import Input from '../components/Input';
 import Button from '../components/Button';
+import DatePicker from '../components/DatePicker';
 
 interface DashboardProps {
   user: { id: number; email: string; role: string };
@@ -65,7 +66,7 @@ export default function Dashboard({ user }: DashboardProps) {
           <h2 className="text-xl font-semibold mb-2">Create Event</h2>
           <form onSubmit={createEvent}>
             <Input value={name} onChange={e => setName(e.target.value)} placeholder="Event name" />
-            <Input type="date" value={date} onChange={e => setDate(e.target.value)} placeholder="Event date" />
+            <DatePicker value={date} onChange={e => setDate(e.target.value)} placeholder="Event date" />
             <Input value={mpAccount} onChange={e => setMpAccount(e.target.value)} placeholder="MercadoPago account" />
             <Input value={posterUrl} onChange={e => setPosterUrl(e.target.value)} placeholder="Poster URL" />
             <Input value={sliderUrl} onChange={e => setSliderUrl(e.target.value)} placeholder="Slider URL" />
@@ -102,8 +103,7 @@ export default function Dashboard({ user }: DashboardProps) {
                   }}
                   placeholder="Quantity"
                 />
-                <Input
-                  type="date"
+                <DatePicker
                   value={ticket.saleStart}
                   onChange={e => {
                     const updated = [...tickets];
