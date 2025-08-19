@@ -19,6 +19,8 @@ model User {
   role          Role     @default(CLIENT)
   events        Event[]  @relation("EventManagerEvents")
   ticketTypes   TicketType[] @relation("TicketTypeCreator")
+  ratingsGiven  Rating[] @relation("RatingsGiven")
+  averageRating Float    @default(0)
 }
 
 enum Role {
@@ -33,7 +35,9 @@ model Event {
   name      String
   manager   User   @relation("EventManagerEvents", fields: [managerId], references: [id])
   managerId Int
+  mercadoPagoAccount String
   tickets   EventTicket[]
+  ratings   Rating[]
 }
 
 model TicketType {
@@ -54,4 +58,14 @@ model EventTicket {
   quantity     Int
   saleStart    DateTime
   saleEnd      DateTime
+}
+
+model Rating {
+  id        Int      @id @default(autoincrement())
+  value     Int
+  rater     User     @relation("RatingsGiven", fields: [raterId], references: [id])
+  raterId   Int
+  event     Event    @relation(fields: [eventId], references: [id])
+  eventId   Int
+  createdAt DateTime @default(now())
 }
