@@ -13,8 +13,6 @@ export default function Home() {
 
   return (
     <>
-      <EventSlider events={events} />
-
       <header className="hero">
         <h1>Bienvenido a EntraDa</h1>
         <p>Soluciones innovadoras de autenticación y gestión de usuarios.</p>
@@ -28,6 +26,8 @@ export default function Home() {
           información de tu organización con tecnologías modernas y fáciles de usar.
         </p>
       </section>
+
+      <EventSlider events={events} />
     </>
   );
 }
