@@ -25,3 +25,12 @@ cp .env.example .env
 ```
 
 This ensures Prisma connects to the Neon instance both locally and in production.
+
+## Email sending
+
+Password recovery emails are sent through the [Resend](https://resend.com) API. To enable this feature set the following environment variables in Vercel or your local `.env` file:
+
+- `RESEND_API_KEY` – your Resend API key
+- `RESEND_FROM` – (optional) the email address used in the `from` field
+
+If `RESEND_API_KEY` is not provided, the application will skip sending emails.

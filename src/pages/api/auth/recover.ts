@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { prisma } from '../../../lib/prisma';
 import { hashPassword } from '../../../lib/auth';
+import { sendEmail } from '../../../lib/email';
 import crypto from 'crypto';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -17,6 +18,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       where: { email },
       data: { resetToken: token, resetTokenExp }
     });
+
+    await sendEmail(
+      email,
+      'Password Recovery',
+      `<p>Your password reset token is: <strong>${token}</strong></p>`
+    );
 
     return res.status(200).json({ message: 'Reset token generated', token });
   } else if (req.method === 'PUT') {
