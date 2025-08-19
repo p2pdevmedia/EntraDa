@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import EventSlider, { Event } from '../components/EventSlider';
 
 export default function Home() {
   const [events, setEvents] = useState<Event[]>([]);
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     fetch('/api/events')
@@ -10,6 +12,10 @@ export default function Home() {
       .then(setEvents)
       .catch(() => setEvents([]));
   }, []);
+
+  const filteredEvents = events.filter(ev =>
+    ev.name.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <>
@@ -28,6 +34,35 @@ export default function Home() {
       </section>
 
       <EventSlider events={events} />
+
+      <section className="max-w-4xl mx-auto px-4">
+        <h2 className="text-2xl font-bold mb-4">Eventos</h2>
+        <input
+          type="text"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          placeholder="Buscar por nombre"
+          className="border p-2 w-full mb-4"
+        />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {filteredEvents.map(ev => (
+            <Link
+              key={ev.id}
+              href={`/buy/${ev.id}`}
+              className="border rounded p-4 hover:shadow cursor-pointer"
+            >
+              {ev.posterUrl && (
+                <img
+                  src={ev.posterUrl}
+                  alt={ev.name}
+                  className="w-full h-48 object-cover mb-2"
+                />
+              )}
+              <h3 className="text-lg font-semibold">{ev.name}</h3>
+            </Link>
+          ))}
+        </div>
+      </section>
     </>
   );
 }
