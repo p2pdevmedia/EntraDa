@@ -14,7 +14,8 @@
     "react-dom": "latest",
     "@prisma/client": "latest",
     "prisma": "latest",
-    "bcryptjs": "latest"
+    "bcryptjs": "latest",
+    "@vercel/speed-insights": "latest"
   },
   "devDependencies": {
     "typescript": "latest",
