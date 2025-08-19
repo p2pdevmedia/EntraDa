@@ -1,6 +1,55 @@
+import { useEffect, useState } from 'react';
+
+interface Event {
+  id: number;
+  name: string;
+  posterUrl?: string;
+}
+
 export default function Home() {
+  const [events, setEvents] = useState<Event[]>([]);
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    fetch('/api/events')
+      .then(res => res.json())
+      .then(setEvents)
+      .catch(() => setEvents([]));
+  }, []);
+
+  const next = () => setCurrent((current + 1) % events.length);
+  const prev = () => setCurrent((current - 1 + events.length) % events.length);
+
   return (
     <>
+      {events.length > 0 && (
+        <div className="relative w-full h-64 overflow-hidden mb-8">
+          {events[current].posterUrl && (
+            <img
+              src={events[current].posterUrl || ''}
+              alt={events[current].name}
+              className="w-full h-full object-cover"
+            />
+          )}
+          {events.length > 1 && (
+            <>
+              <button
+                onClick={prev}
+                className="absolute left-0 top-1/2 -translate-y-1/2 bg-white bg-opacity-50 px-2"
+              >
+                ‹
+              </button>
+              <button
+                onClick={next}
+                className="absolute right-0 top-1/2 -translate-y-1/2 bg-white bg-opacity-50 px-2"
+              >
+                ›
+              </button>
+            </>
+          )}
+        </div>
+      )}
+
       <header className="hero">
         <h1>Bienvenido a EntraDa</h1>
         <p>Soluciones innovadoras de autenticación y gestión de usuarios.</p>

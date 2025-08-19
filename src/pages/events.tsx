@@ -4,6 +4,9 @@ interface Event {
   id: number;
   name: string;
   mercadoPagoAccount: string;
+  posterUrl?: string;
+  sliderUrl?: string;
+  miniUrl?: string;
 }
 
 export default function EventsPage() {
@@ -49,6 +52,9 @@ export default function EventsPage() {
           <tr>
             <th className="text-left p-2">Nombre</th>
             <th className="text-left p-2">Cuenta MP</th>
+            <th className="text-left p-2">Poster URL</th>
+            <th className="text-left p-2">Slider URL</th>
+            <th className="text-left p-2">Mini URL</th>
             <th className="p-2">Acciones</th>
           </tr>
         </thead>
@@ -67,6 +73,27 @@ export default function EventsPage() {
                   className="border p-1"
                   value={ev.mercadoPagoAccount}
                   onChange={e => handleChange(ev.id, 'mercadoPagoAccount', e.target.value)}
+                />
+              </td>
+              <td className="p-2">
+                <input
+                  className="border p-1"
+                  value={ev.posterUrl || ''}
+                  onChange={e => handleChange(ev.id, 'posterUrl', e.target.value)}
+                />
+              </td>
+              <td className="p-2">
+                <input
+                  className="border p-1"
+                  value={ev.sliderUrl || ''}
+                  onChange={e => handleChange(ev.id, 'sliderUrl', e.target.value)}
+                />
+              </td>
+              <td className="p-2">
+                <input
+                  className="border p-1"
+                  value={ev.miniUrl || ''}
+                  onChange={e => handleChange(ev.id, 'miniUrl', e.target.value)}
                 />
               </td>
               <td className="p-2">

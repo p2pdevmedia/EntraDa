@@ -36,6 +36,9 @@ model Event {
   manager   User   @relation("EventManagerEvents", fields: [managerId], references: [id])
   managerId Int
   mercadoPagoAccount String
+  posterUrl String?
+  sliderUrl String?
+  miniUrl   String?
   tickets   EventTicket[]
   ratings   Rating[]
 }
