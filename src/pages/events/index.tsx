@@ -47,9 +47,9 @@ export default function EventsPage() {
           <tr>
             <th className="text-left p-2">Nombre</th>
             <th className="text-left p-2">Cuenta MP</th>
-            <th className="text-left p-2">Poster URL</th>
-            <th className="text-left p-2">Slider URL</th>
-            <th className="text-left p-2">Mini URL</th>
+            <th className="text-left p-2">Poster</th>
+            <th className="text-left p-2">Slider</th>
+            <th className="text-left p-2">Mini</th>
             <th className="p-2">Acciones</th>
           </tr>
         </thead>
@@ -58,9 +58,33 @@ export default function EventsPage() {
             <tr key={ev.id}>
               <td className="p-2">{ev.name}</td>
               <td className="p-2">{ev.mercadoPagoAccount}</td>
-              <td className="p-2">{ev.posterUrl || ''}</td>
-              <td className="p-2">{ev.sliderUrl || ''}</td>
-              <td className="p-2">{ev.miniUrl || ''}</td>
+              <td className="p-2">
+                {ev.posterUrl && (
+                  <img
+                    src={ev.posterUrl}
+                    alt={`${ev.name} poster`}
+                    className="h-20 object-cover"
+                  />
+                )}
+              </td>
+              <td className="p-2">
+                {ev.sliderUrl && (
+                  <img
+                    src={ev.sliderUrl}
+                    alt={`${ev.name} slider`}
+                    className="h-20 object-cover"
+                  />
+                )}
+              </td>
+              <td className="p-2">
+                {ev.miniUrl && (
+                  <img
+                    src={ev.miniUrl}
+                    alt={`${ev.name} thumbnail`}
+                    className="h-20 object-cover"
+                  />
+                )}
+              </td>
               <td className="p-2 space-x-2">
                 <button
                   className="bg-blue-500 text-white px-2 py-1 rounded"
