@@ -104,22 +104,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         posterUrl,
         sliderUrl,
         miniUrl,
-        tickets: {
+        ticketTypes: {
           create: tickets.map((t: any) => ({
+            name: t.name,
+            price: t.price,
             quantity: t.quantity,
             saleStart: new Date(t.saleStart),
             saleEnd: new Date(date),
-            ticketType: {
-              create: {
-                name: t.name,
-                price: t.price,
-                creatorId: user.id,
-              },
-            },
           })),
         },
       },
-      include: { tickets: true },
+      include: { ticketTypes: true },
     });
 
     return res.status(201).json(event);
