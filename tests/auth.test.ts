@@ -10,8 +10,8 @@ import recoverHandler from '../src/pages/api/auth/recover';
 import { prisma } from '../src/lib/prisma';
 import { rateLimiters } from '../src/lib/rateLimit';
 
-function createMockReqRes({ method = 'GET', body = {}, cookies = {} } = {}) {
-  const req = { method, body, cookies } as any;
+function createMockReqRes({ method = 'GET', body = {}, cookies = {}, query = {} } = {}) {
+  const req = { method, body, cookies, query } as any;
   let statusCode = 200;
   let jsonData: any;
   const headers: Record<string, string[]> = {};
@@ -155,6 +155,7 @@ test('me returns user when session cookie present', async () => {
   await meHandler(req, res);
   assert.equal(res.getStatus(), 200);
   assert.deepEqual(res.getJSON(), { user: { id: 1, email: 'd@d.com', role: 'CLIENT' } });
+});
 
 test('login locks after multiple failed attempts', async () => {
   users.length = 0;
