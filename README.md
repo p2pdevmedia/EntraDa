@@ -15,7 +15,7 @@ Set a `DATABASE_URL` environment variable pointing to your PostgreSQL instance b
 To deploy on Vercel with a Neon PostgreSQL database, set the `DATABASE_URL` environment variable in your Vercel project to the following connection string:
 
 ```
-postgresql://neondb_owner:npg_uyIHSB8OYlC5@ep-still-glade-acdx8v5z-pooler.sa-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+postgresql://neondb_owner:YOUR_PASSWORD@ep-still-glade-acdx8v5z-pooler.sa-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
 ```
 
 For local development, copy `.env.example` to `.env`:
