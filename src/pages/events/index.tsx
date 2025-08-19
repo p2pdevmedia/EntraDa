@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 interface Event {
   id: number;
@@ -63,28 +64,37 @@ export default function EventsPage() {
               <td className="p-2">{ev.mercadoPagoAccount}</td>
               <td className="p-2">
                 {ev.posterUrl && (
-                  <img
+                  <Image
                     src={ev.posterUrl}
                     alt={`${ev.name} poster`}
-                    className="h-20 object-cover"
+                    width={80}
+                    height={80}
+                    className="object-cover"
+                    unoptimized
                   />
                 )}
               </td>
               <td className="p-2">
                 {ev.sliderUrl && (
-                  <img
+                  <Image
                     src={ev.sliderUrl}
                     alt={`${ev.name} slider`}
-                    className="h-20 object-cover"
+                    width={80}
+                    height={80}
+                    className="object-cover"
+                    unoptimized
                   />
                 )}
               </td>
               <td className="p-2">
                 {ev.miniUrl && (
-                  <img
+                  <Image
                     src={ev.miniUrl}
                     alt={`${ev.name} thumbnail`}
-                    className="h-20 object-cover"
+                    width={80}
+                    height={80}
+                    className="object-cover"
+                    unoptimized
                   />
                 )}
               </td>
