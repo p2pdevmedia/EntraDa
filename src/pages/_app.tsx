@@ -6,7 +6,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Navbar />
-      <div className="pt-20">
+      <div className="pt-16">
         <Component {...pageProps} />
       </div>
     </>
