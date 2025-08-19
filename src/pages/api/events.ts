@@ -26,6 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           posterUrl: true,
           sliderUrl: true,
           miniUrl: true,
+          ticketTypes: true,
         }
       : { id: true, name: true, posterUrl: true, sliderUrl: true };
 
@@ -45,9 +46,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(403).json({ message: 'Forbidden' });
     }
 
-    const { id, name, date, mercadoPagoAccount, posterUrl, sliderUrl, miniUrl } = req.body;
-    if (typeof id !== 'number' || !date) {
+    const { id, name, date, tickets, mercadoPagoAccount, posterUrl, sliderUrl, miniUrl } =
+      req.body;
+    if (typeof id !== 'number' || !date || !Array.isArray(tickets)) {
       return res.status(400).json({ message: 'Invalid payload' });
+    }
+
+    for (const t of tickets) {
+      if (
+        !t.name ||
+        typeof t.price !== 'number' ||
+        typeof t.quantity !== 'number' ||
+        !t.saleStart
+      ) {
+        return res.status(400).json({ message: 'Invalid ticket specification' });
+      }
     }
 
     const event = await prisma.event.findUnique({ where: { id } });
@@ -59,7 +72,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const updated = await prisma.event.update({
       where: { id },
-      data: { name, date: new Date(date), mercadoPagoAccount, posterUrl, sliderUrl, miniUrl },
+      data: {
+        name,
+        date: new Date(date),
+        mercadoPagoAccount,
+        posterUrl,
+        sliderUrl,
+        miniUrl,
+        ticketTypes: {
+          deleteMany: {},
+          create: tickets.map((t: any) => ({
+            name: t.name,
+            price: t.price,
+            quantity: t.quantity,
+            saleStart: new Date(t.saleStart),
+            saleEnd: new Date(date),
+          })),
+        },
+      },
       select: {
         id: true,
         name: true,
@@ -68,6 +98,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         posterUrl: true,
         sliderUrl: true,
         miniUrl: true,
+        ticketTypes: true,
       },
     });
 
