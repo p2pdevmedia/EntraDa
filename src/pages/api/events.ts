@@ -26,17 +26,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           posterUrl: true,
           sliderUrl: true,
           miniUrl: true,
-          ticketTypes: true,
+          ticketTypes: {
+            include: { _count: { select: { tickets: true } } },
+          },
         }
       : { id: true, name: true, posterUrl: true, sliderUrl: true };
 
     const events = await prisma.event.findMany({ where, select });
 
+    const eventsWithSales = events.map((ev: any) => ({
+      ...ev,
+      ticketsSold: ev.ticketTypes
+        ? ev.ticketTypes.reduce(
+            (sum: number, t: any) => sum + (t._count?.tickets || 0),
+            0
+          )
+        : 0,
+    }));
+
     if (id) {
-      return res.status(200).json(events[0] || null);
+      return res.status(200).json(eventsWithSales[0] || null);
     }
 
-    return res.status(200).json(events);
+    return res.status(200).json(eventsWithSales);
   }
 
   if (!user) return res.status(401).json({ message: 'Unauthorized' });

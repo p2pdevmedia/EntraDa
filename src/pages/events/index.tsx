@@ -10,6 +10,7 @@ interface Event {
   posterUrl?: string;
   sliderUrl?: string;
   miniUrl?: string;
+  ticketsSold?: number;
 }
 
 export default function EventsPage() {
@@ -53,6 +54,7 @@ export default function EventsPage() {
             <th className="text-left p-2">Poster</th>
             <th className="text-left p-2">Slider</th>
             <th className="text-left p-2">Mini</th>
+            <th className="text-left p-2">Vendidas</th>
             <th className="p-2">Acciones</th>
           </tr>
         </thead>
@@ -98,6 +100,7 @@ export default function EventsPage() {
                   />
                 )}
               </td>
+              <td className="p-2">{ev.ticketsSold ?? 0}</td>
               <td className="p-2 space-x-2">
                 <button
                   className="bg-blue-500 text-white px-2 py-1 rounded"
