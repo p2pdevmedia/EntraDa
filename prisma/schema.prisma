@@ -20,6 +20,7 @@ model User {
   events        Event[]  @relation("EventManagerEvents")
   ratingsGiven  Rating[] @relation("RatingsGiven")
   averageRating Float    @default(0)
+  tickets       Ticket[]
 }
 
 enum Role {
@@ -52,6 +53,17 @@ model TicketType {
   saleEnd   DateTime
   event     Event @relation(fields: [eventId], references: [id])
   eventId   Int
+  tickets   Ticket[]
+}
+
+model Ticket {
+  id           Int        @id @default(autoincrement())
+  qrHash       String     @unique
+  ticketType   TicketType @relation(fields: [ticketTypeId], references: [id])
+  ticketTypeId Int
+  buyer        User?      @relation(fields: [buyerId], references: [id])
+  buyerId      Int?
+  email        String?
 }
 
 model Rating {
