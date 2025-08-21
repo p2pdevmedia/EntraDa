@@ -25,9 +25,30 @@ export default function BuyEvent() {
     }
   }, [id]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert('Compra enviada');
+    if (typeof id !== 'string') return;
+
+    const res = await fetch('/api/tickets', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        eventId: Number(id),
+        name,
+        email,
+        quantity,
+      }),
+    });
+
+    if (res.ok) {
+      alert('Compra enviada');
+      setName('');
+      setEmail('');
+      setQuantity(1);
+    } else {
+      const data = await res.json().catch(() => null);
+      alert(data?.message || 'Error al procesar la compra');
+    }
   };
 
   if (!event) {
