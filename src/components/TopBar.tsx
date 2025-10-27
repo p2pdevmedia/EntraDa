@@ -91,22 +91,23 @@ export default function TopBar() {
   };
 
   return (
-    <nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 pointer-events-none">
-      <div
-        className="flex items-center justify-between gap-6 px-6 py-2 bg-black/60 backdrop-blur-md border border-white/10 text-white rounded-full pointer-events-auto shadow-lg max-w-5xl w-full"
-      >
-        <Link
-          href="/"
-          className="text-xl font-semibold tracking-tight hover:opacity-80 transition"
-        >
-          EntraDa
+    <nav className="bg-white w-full flex relative justify-between items-center px-6 md:px-8 h-20 shadow-sm border-b">
+      <div className="inline-flex items-center">
+        <Link href="/" className="flex items-center gap-2 group">
+          <span className="text-2xl font-semibold tracking-tight text-gray-900 group-hover:text-blue-600 transition">
+            EntraDa
+          </span>
         </Link>
-        <div className="flex items-center gap-4 text-sm font-medium">
+      </div>
+
+      <div className="hidden md:flex flex-1 justify-center px-6">
+        <div className="flex items-center gap-6 text-sm font-medium text-gray-700">
           {renderNavLinks()}
         </div>
-        <div className="flex items-center gap-3 text-sm">
-          {renderAuthLinks()}
-        </div>
+      </div>
+
+      <div className="flex items-center justify-end gap-3 text-sm font-medium">
+        {renderAuthLinks()}
       </div>
     </nav>
   );
