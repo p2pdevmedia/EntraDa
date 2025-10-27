@@ -44,87 +44,155 @@ const owners = [
 
 export default function Home() {
   return (
-    <>
-      <header className="hero bg-gradient-to-r from-sky-900 via-slate-900 to-slate-800 text-white py-20 px-6 text-center">
-        <h1 className="text-4xl font-bold mb-4">SeguraPool</h1>
-        <p className="max-w-2xl mx-auto text-lg">
-          La plataforma de seguros de autos y hogares donde tus pagos mensuales alimentan un pool gestionado con
-          contratos inteligentes. Transparencia, seguridad y liquidez para responder a cada siniestro.
-        </p>
-        <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-          <Link
-            href="/signup"
-            className="bg-white text-slate-900 px-6 py-3 rounded font-semibold shadow hover:bg-slate-100"
-          >
-            Crear cuenta
-          </Link>
-          <Link
-            href="/dashboard"
-            className="border border-white px-6 py-3 rounded font-semibold hover:bg-white hover:text-slate-900"
-          >
-            Ver dashboard
-          </Link>
+    <main className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100">
+      <header
+        className="relative overflow-hidden text-white"
+        style={{
+          backgroundImage:
+            "url('https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1800&q=80')",
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-950/90 via-slate-900/85 to-emerald-900/70" />
+        <div className="relative mx-auto flex max-w-6xl flex-col items-center px-6 py-24 text-center sm:py-28">
+          <span className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/10 px-5 py-2 text-xs font-semibold uppercase tracking-[0.2em]">
+            Pool asegurador descentralizado
+          </span>
+          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
+            Protege autos y hogares con contratos inteligentes transparentes
+          </h1>
+          <p className="mt-6 max-w-3xl text-lg text-slate-200">
+            Tus aportes mensuales se integran en un fondo común auditable que maximiza liquidez, minimiza fraude y
+            asegura la gobernanza mediante la aprobación de tres owners para liberar pagos ante siniestros.
+          </p>
+          <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row">
+            <Link
+              href="/signup"
+              className="group inline-flex items-center justify-center rounded-full bg-gradient-to-r from-emerald-400 via-sky-500 to-blue-600 px-8 py-3 text-base font-semibold text-white shadow-lg shadow-emerald-500/30 transition hover:scale-[1.02] focus:outline-none focus-visible:ring-4 focus-visible:ring-emerald-300"
+            >
+              <span>Crear cuenta</span>
+              <svg
+                className="ml-3 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M5 10h10m0 0-4-4m4 4-4 4" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </Link>
+            <Link
+              href="/dashboard"
+              className="inline-flex items-center justify-center rounded-full border border-white/60 px-8 py-3 text-base font-semibold text-white transition hover:border-emerald-300 hover:bg-white/10 focus:outline-none focus-visible:ring-4 focus-visible:ring-emerald-300/60"
+            >
+              Ver dashboard en vivo
+            </Link>
+          </div>
         </div>
       </header>
 
-      <section className="max-w-5xl mx-auto px-6 py-16">
-        <h2 className="text-3xl font-bold mb-8 text-center">¿Cómo funciona el pool inteligente?</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <section className="relative mx-auto mt-16 max-w-6xl px-6">
+        <div className="absolute -inset-x-10 top-1/2 -z-10 h-72 -translate-y-1/2 rounded-3xl bg-gradient-to-r from-slate-800/60 via-slate-900/50 to-sky-900/60 blur-3xl" />
+        <h2 className="text-center text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+          ¿Cómo funciona el pool inteligente?
+        </h2>
+        <p className="mx-auto mt-4 max-w-2xl text-center text-sm text-slate-300 sm:text-base">
+          Cada aporte queda registrado en la cadena, permitiendo auditorías en tiempo real y liberaciones controladas de
+          capital en caso de siniestros.
+        </p>
+        <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
           {highlights.map(item => (
-            <article key={item.title} className="border rounded-lg p-6 shadow-sm bg-white">
-              <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-              <p className="text-slate-600">{item.description}</p>
+            <article
+              key={item.title}
+              className="group relative overflow-hidden rounded-2xl border border-white/5 bg-slate-900/70 p-8 shadow-lg shadow-sky-900/40 backdrop-blur"
+            >
+              <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-gradient-to-br from-emerald-400/20 via-sky-500/10 to-blue-600/5 blur-2xl transition duration-300 group-hover:scale-125" />
+              <div className="relative">
+                <h3 className="text-xl font-semibold text-white">{item.title}</h3>
+                <p className="mt-3 text-sm text-slate-300">{item.description}</p>
+              </div>
             </article>
           ))}
         </div>
       </section>
 
-      <section className="bg-slate-100 py-16">
-        <div className="max-w-5xl mx-auto px-6">
-          <h2 className="text-3xl font-bold mb-8 text-center">Planes de cobertura</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <section className="relative mt-24 bg-gradient-to-br from-emerald-500/15 via-sky-500/10 to-blue-600/10 py-20">
+        <div className="absolute inset-x-0 -top-10 -z-10 h-20 bg-gradient-to-b from-black/40 to-transparent" />
+        <div className="mx-auto max-w-6xl px-6">
+          <h2 className="text-center text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+            Planes de cobertura
+          </h2>
+          <p className="mx-auto mt-4 max-w-2xl text-center text-sm text-slate-200 sm:text-base">
+            Diseñados para proteger cada aspecto de tu patrimonio con condiciones transparentes y liquidaciones ágiles.
+          </p>
+          <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-3">
             {coverages.map(plan => (
-              <article key={plan.title} className="bg-white border rounded-lg p-6 shadow-sm">
-                <h3 className="text-xl font-semibold mb-2">{plan.title}</h3>
-                <p className="text-slate-600">{plan.description}</p>
+              <article
+                key={plan.title}
+                className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-8 text-white shadow-xl backdrop-blur"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-emerald-300/10 to-sky-400/10 opacity-80" />
+                <div className="relative">
+                  <h3 className="text-xl font-semibold">{plan.title}</h3>
+                  <p className="mt-3 text-sm text-slate-100/80">{plan.description}</p>
+                </div>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="max-w-4xl mx-auto px-6 py-16">
-        <h2 className="text-3xl font-bold mb-8 text-center">Gobernanza del pool</h2>
-        <p className="text-center text-slate-600 mb-10">
-          Los retiros para pagar siniestros requieren la aprobación conjunta de tres owners que representan las áreas
-          críticas del negocio. Cada operación queda registrada en la cadena para auditorías continuas.
-        </p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {owners.map(owner => (
-            <article key={owner.name} className="border rounded-lg p-6 shadow-sm">
-              <h3 className="text-lg font-semibold">{owner.name}</h3>
-              <p className="text-sm text-slate-500 mb-2">{owner.role}</p>
-              <p className="text-slate-600">{owner.focus}</p>
-            </article>
-          ))}
+      <section className="relative mx-auto mt-24 max-w-6xl px-6 pb-24">
+        <div className="absolute inset-x-0 top-0 -z-10 h-full rounded-3xl border border-white/5 bg-slate-900/60 shadow-2xl shadow-emerald-900/40" />
+        <div className="relative rounded-3xl px-6 py-16 sm:px-10 md:px-16">
+          <h2 className="text-center text-3xl font-semibold tracking-tight text-white sm:text-4xl">Gobernanza del pool</h2>
+          <p className="mx-auto mt-4 max-w-3xl text-center text-sm text-slate-300 sm:text-base">
+            Los retiros requieren la aprobación conjunta de tres owners que vigilan riesgos, liquidez y ejecución técnica
+            del contrato. Cada movimiento queda registrado en la cadena para auditorías continuas y transparencia total.
+          </p>
+          <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-3">
+            {owners.map(owner => (
+              <article
+                key={owner.name}
+                className="rounded-2xl border border-white/10 bg-white/5 p-8 text-white shadow-lg shadow-emerald-900/30 backdrop-blur"
+              >
+                <h3 className="text-xl font-semibold">{owner.name}</h3>
+                <p className="mt-2 text-xs uppercase tracking-[0.35em] text-emerald-300/80">{owner.role}</p>
+                <p className="mt-4 text-sm text-slate-100/80">{owner.focus}</p>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 
-      <section className="bg-slate-900 text-white py-16">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-bold mb-4">Protege hoy tu patrimonio</h2>
-          <p className="text-slate-200 mb-8">
+      <section
+        className="relative overflow-hidden bg-slate-950"
+        style={{
+          backgroundImage:
+            "url('https://images.unsplash.com/photo-1529429617124-aee711a67bb1?auto=format&fit=crop&w=1800&q=80')",
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-950/95 via-slate-900/85 to-sky-900/75" />
+        <div className="relative mx-auto flex max-w-5xl flex-col items-center px-6 py-20 text-center text-white">
+          <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Protege hoy tu patrimonio</h2>
+          <p className="mt-4 max-w-3xl text-sm text-slate-200 sm:text-base">
             Integra tus pólizas de auto y hogar en una plataforma descentralizada que da visibilidad total a tus fondos.
             Configura aportaciones automáticas, monitorea reservas en tiempo real y responde a siniestros sin fricción.
           </p>
-          <Link
-            href="/login"
-            className="bg-white text-slate-900 px-6 py-3 rounded font-semibold shadow hover:bg-slate-100"
-          >
-            Iniciar sesión
-          </Link>
+          <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row">
+            <Link
+              href="/login"
+              className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-sky-500 to-blue-600 px-8 py-3 text-base font-semibold text-white shadow-lg shadow-sky-500/30 transition hover:scale-[1.02] focus:outline-none focus-visible:ring-4 focus-visible:ring-sky-300"
+            >
+              Iniciar sesión
+            </Link>
+            <Link
+              href="/docs"
+              className="inline-flex items-center justify-center rounded-full border border-white/60 px-8 py-3 text-base font-semibold text-white transition hover:border-emerald-300 hover:bg-white/10 focus:outline-none focus-visible:ring-4 focus-visible:ring-emerald-300/60"
+            >
+              Ver whitepaper
+            </Link>
+          </div>
         </div>
       </section>
-    </>
+    </main>
   );
 }
