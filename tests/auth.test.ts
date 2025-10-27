@@ -45,12 +45,28 @@ function createMockReqRes({ method = 'GET', body = {}, cookies = {}, query = {} 
 
 const users: any[] = [];
 (prisma as any).user = {
-  findUnique: async ({ where }: any) =>
-    users.find((u) => (where.email ? u.email === where.email : u.id === where.id)) || null,
+  findUnique: async ({ where }: any) => {
+    if (where.email) {
+      return users.find((u) => u.email === where.email) || null;
+    }
+    if (where.walletAddress) {
+      return users.find((u) => u.walletAddress === where.walletAddress) || null;
+    }
+    if (where.id) {
+      return users.find((u) => u.id === where.id) || null;
+    }
+    return null;
+  },
   create: async ({ data }: any) => {
     const user = { id: users.length + 1, ...data };
     users.push(user);
-    return { id: user.id, email: user.email, passwordHash: user.passwordHash, role: user.role };
+    return {
+      id: user.id,
+      email: user.email,
+      passwordHash: user.passwordHash,
+      role: user.role,
+      walletAddress: user.walletAddress,
+    };
   },
 };
 
@@ -97,6 +113,18 @@ test('signup locks after repeated failures', async () => {
   assert.equal(res.getStatus(), 429);
 });
 
+test('signup fails if wallet already exists', async () => {
+  users.length = 0;
+  rateLimiters.signup.reset('global');
+  users.push({ id: 1, email: 'existing@wallet.com', passwordHash: 'hash', walletAddress: '0xabc' });
+  const { req, res } = createMockReqRes({
+    method: 'POST',
+    body: { email: 'new@wallet.com', password: 'pass', walletAddress: '0xABC' },
+  });
+  await signupHandler(req, res);
+  assert.equal(res.getStatus(), 409);
+});
+
 test('login succeeds and sets cookie', async () => {
   users.length = 0;
   rateLimiters.login.reset('global');
@@ -110,6 +138,27 @@ test('login succeeds and sets cookie', async () => {
   const { req, res } = createMockReqRes({
     method: 'POST',
     body: { email: 'b@b.com', password: 'secret' },
+  });
+  await loginHandler(req, res);
+  assert.equal(res.getStatus(), 200);
+  const cookies = res.getHeaders()['set-cookie'];
+  assert.ok(cookies && /session=/.test(cookies[0]));
+});
+
+test('login with wallet succeeds when registered', async () => {
+  users.length = 0;
+  rateLimiters.login.reset('global');
+  rateLimiters.signup.reset('global');
+  const walletAddress = '0x12345';
+  const { req: sReq, res: sRes } = createMockReqRes({
+    method: 'POST',
+    body: { email: 'wallet@user.com', password: 'secret', walletAddress },
+  });
+  await signupHandler(sReq, sRes);
+
+  const { req, res } = createMockReqRes({
+    method: 'POST',
+    body: { walletAddress: walletAddress.toUpperCase() },
   });
   await loginHandler(req, res);
   assert.equal(res.getStatus(), 200);
