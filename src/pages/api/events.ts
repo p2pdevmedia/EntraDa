@@ -1,124 +1,33 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { prisma } from '../../lib/prisma';
 import { getSessionUser } from '../../lib/session';
-import { Role } from '@prisma/client';
+import { getStore } from '../../lib/store';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const user = await getSessionUser(req);
+  const store = getStore();
 
   if (req.method === 'GET') {
     const { id } = req.query;
-    const baseWhere =
-      user && user.role === Role.EVENT_MANAGER ? { managerId: user.id } : {};
-    const where =
-      id && typeof id === 'string' ? { ...baseWhere, id: Number(id) } : baseWhere;
-
-    if (user && user.role !== Role.ADMIN && user.role !== Role.EVENT_MANAGER) {
-      return res.status(403).json({ message: 'Forbidden' });
-    }
-
-    const select = user
-      ? {
-          id: true,
-          name: true,
-          date: true,
-          mercadoPagoAccount: true,
-          posterUrl: true,
-          sliderUrl: true,
-          miniUrl: true,
-          ticketTypes: {
-            include: { _count: { select: { tickets: true } } },
-          },
-        }
-      : { id: true, name: true, posterUrl: true, sliderUrl: true };
-
-    const events = await prisma.event.findMany({ where, select });
-
-    const eventsWithSales = events.map((ev: any) => ({
-      ...ev,
-      ticketsSold: ev.ticketTypes
-        ? ev.ticketTypes.reduce(
-            (sum: number, t: any) => sum + (t._count?.tickets || 0),
-            0
-          )
-        : 0,
-    }));
-
     if (id) {
-      return res.status(200).json(eventsWithSales[0] || null);
+      const eventId = Number(id);
+      if (Number.isNaN(eventId)) return res.status(400).json({ message: 'Invalid id' });
+      const event = store.events.find(e => e.id === eventId);
+      if (!event) return res.status(404).json({ message: 'Event not found' });
+      return res.status(200).json(event);
     }
 
-    return res.status(200).json(eventsWithSales);
+    const events = store.events.map(event => {
+      const ticketTypeIds = event.ticketTypes.map(tt => tt.id);
+      const sold = store.tickets.filter(ticket => ticketTypeIds.includes(ticket.ticketTypeId)).length;
+      return { ...event, ticketsSold: sold };
+    });
+    return res.status(200).json(events);
   }
 
+  const user = await getSessionUser(req);
   if (!user) return res.status(401).json({ message: 'Unauthorized' });
 
-  if (req.method === 'PUT') {
-    if (user.role !== Role.ADMIN && user.role !== Role.EVENT_MANAGER) {
-      return res.status(403).json({ message: 'Forbidden' });
-    }
-
-    const { id, name, date, tickets, mercadoPagoAccount, posterUrl, sliderUrl, miniUrl } =
-      req.body;
-    if (typeof id !== 'number' || !date || !Array.isArray(tickets)) {
-      return res.status(400).json({ message: 'Invalid payload' });
-    }
-
-    for (const t of tickets) {
-      if (
-        !t.name ||
-        typeof t.price !== 'number' ||
-        typeof t.quantity !== 'number' ||
-        !t.saleStart
-      ) {
-        return res.status(400).json({ message: 'Invalid ticket specification' });
-      }
-    }
-
-    const event = await prisma.event.findUnique({ where: { id } });
-    if (!event) return res.status(404).json({ message: 'Event not found' });
-
-    if (user.role !== Role.ADMIN && event.managerId !== user.id) {
-      return res.status(403).json({ message: 'Forbidden' });
-    }
-
-    const updated = await prisma.event.update({
-      where: { id },
-      data: {
-        name,
-        date: new Date(date),
-        mercadoPagoAccount,
-        posterUrl,
-        sliderUrl,
-        miniUrl,
-        ticketTypes: {
-          deleteMany: {},
-          create: tickets.map((t: any) => ({
-            name: t.name,
-            price: t.price,
-            quantity: t.quantity,
-            saleStart: new Date(t.saleStart),
-            saleEnd: new Date(date),
-          })),
-        },
-      },
-      select: {
-        id: true,
-        name: true,
-        date: true,
-        mercadoPagoAccount: true,
-        posterUrl: true,
-        sliderUrl: true,
-        miniUrl: true,
-        ticketTypes: true,
-      },
-    });
-
-    return res.status(200).json(updated);
-  }
-
   if (req.method === 'POST') {
-    if (user.role !== Role.EVENT_MANAGER && user.role !== Role.ADMIN) {
+    if (user.role !== 'EVENT_MANAGER' && user.role !== 'ADMIN') {
       return res.status(403).json({ message: 'Forbidden' });
     }
 
@@ -127,63 +36,75 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(400).json({ message: 'Invalid payload' });
     }
 
-    for (const t of tickets) {
-      if (
-        !t.name ||
-        typeof t.price !== 'number' ||
-        typeof t.quantity !== 'number' ||
-        !t.saleStart
-      ) {
-        return res.status(400).json({ message: 'Invalid ticket specification' });
-      }
-    }
+    const ticketTypes = tickets.map((t: any) => ({
+      id: store.nextTicketTypeId++,
+      name: t.name,
+      price: Number(t.price),
+      quantity: Number(t.quantity),
+      saleStart: new Date(t.saleStart),
+      saleEnd: new Date(date),
+    }));
 
-    const event = await prisma.event.create({
-      data: {
-        name,
-        date: new Date(date),
-        managerId: user.id,
-        mercadoPagoAccount,
-        posterUrl,
-        sliderUrl,
-        miniUrl,
-        ticketTypes: {
-          create: tickets.map((t: any) => ({
-            name: t.name,
-            price: t.price,
-            quantity: t.quantity,
-            saleStart: new Date(t.saleStart),
-            saleEnd: new Date(date),
-          })),
-        },
-      },
-      include: { ticketTypes: true },
-    });
+    const event = {
+      id: store.nextEventId++,
+      name,
+      date: new Date(date),
+      mercadoPagoAccount,
+      posterUrl,
+      sliderUrl,
+      miniUrl,
+      managerId: user.id,
+      ticketTypes,
+    };
 
+    store.events.push(event);
     return res.status(201).json(event);
   }
 
+  if (req.method === 'PUT') {
+    const { id, name, date, tickets, mercadoPagoAccount, posterUrl, sliderUrl, miniUrl } = req.body;
+    if (typeof id !== 'number' || !name || !date || !Array.isArray(tickets)) {
+      return res.status(400).json({ message: 'Invalid payload' });
+    }
+
+    const event = store.events.find(e => e.id === id);
+    if (!event) return res.status(404).json({ message: 'Event not found' });
+    if (user.role !== 'ADMIN' && event.managerId !== user.id) return res.status(403).json({ message: 'Forbidden' });
+
+    event.name = name;
+    event.date = new Date(date);
+    event.mercadoPagoAccount = mercadoPagoAccount;
+    event.posterUrl = posterUrl;
+    event.sliderUrl = sliderUrl;
+    event.miniUrl = miniUrl;
+    event.ticketTypes = tickets.map((t: any) => ({
+      id: store.nextTicketTypeId++,
+      name: t.name,
+      price: Number(t.price),
+      quantity: Number(t.quantity),
+      saleStart: new Date(t.saleStart),
+      saleEnd: new Date(date),
+    }));
+
+    return res.status(200).json(event);
+  }
+
   if (req.method === 'DELETE') {
-    if (user.role !== Role.ADMIN && user.role !== Role.EVENT_MANAGER) {
+    if (user.role !== 'ADMIN' && user.role !== 'EVENT_MANAGER') {
       return res.status(403).json({ message: 'Forbidden' });
     }
 
     const { id } = req.query;
     const eventId = Number(id);
-    if (!id || Array.isArray(id) || isNaN(eventId)) {
+    if (!id || Array.isArray(id) || Number.isNaN(eventId)) {
       return res.status(400).json({ message: 'Invalid id' });
     }
 
-    const event = await prisma.event.findUnique({ where: { id: eventId } });
-    if (!event) {
-      return res.status(404).json({ message: 'Event not found' });
-    }
-
-    if (user.role !== Role.ADMIN && event.managerId !== user.id) {
-      return res.status(403).json({ message: 'Forbidden' });
-    }
-
-    await prisma.event.delete({ where: { id: eventId } });
+    const idx = store.events.findIndex(e => e.id === eventId);
+    if (idx < 0) return res.status(404).json({ message: 'Event not found' });
+    const event = store.events[idx];
+    if (user.role !== 'ADMIN' && event.managerId !== user.id) return res.status(403).json({ message: 'Forbidden' });
+    store.events.splice(idx, 1);
     return res.status(204).end();
   }
 

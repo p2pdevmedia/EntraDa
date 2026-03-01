@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { prisma } from '../../../lib/prisma';
 import { verifyPassword } from '../../../lib/auth';
 import { rateLimiters, getClientId } from '../../../lib/rateLimit';
+import { getStore } from '../../../lib/store';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') return res.status(405).end();
@@ -14,10 +14,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   const { email, password, walletAddress } = req.body;
+  const store = getStore();
 
   if (walletAddress) {
     const normalizedAddress = String(walletAddress).toLowerCase();
-    const user = await prisma.user.findUnique({ where: { walletAddress: normalizedAddress } });
+    const user = store.users.find(u => u.walletAddress === normalizedAddress);
     if (!user) {
       rateLimiters.login.fail(key);
       return res.status(401).json({ message: 'Wallet not found' });
@@ -33,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(400).json({ message: 'Email and password required' });
   }
 
-  const user = await prisma.user.findUnique({ where: { email } });
+  const user = store.users.find(u => u.email === email);
   if (!user) {
     rateLimiters.login.fail(key);
     return res.status(401).json({ message: 'Invalid credentials' });

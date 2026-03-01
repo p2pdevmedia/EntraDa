@@ -1,10 +1,10 @@
 {
   "name": "entrada",
   "version": "1.0.0",
-  "description": "Simple Next.js app with auth and Prisma",
+  "description": "Simple Next.js app with in-memory auth and event management",
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "next build",
     "start": "next start",
     "test": "tsc -p tsconfig.test.json && node --test build/tests/auth.test.js"
   },
@@ -12,8 +12,6 @@
     "next": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "@prisma/client": "latest",
-    "prisma": "latest",
     "bcryptjs": "latest",
     "@vercel/speed-insights": "latest"
   },

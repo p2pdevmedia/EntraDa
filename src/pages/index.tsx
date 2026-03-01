@@ -1,194 +1,182 @@
 import Link from 'next/link';
 
-const coverages = [
-  {
-    title: 'Cobertura Automotriz Integral',
-    description:
-      'Protección contra accidentes, robo y daños a terceros para tu vehículo con asistencia en carretera 24/7.',
-  },
-  {
-    title: 'Cobertura para Hogares',
-    description:
-      'Respaldo para tu vivienda ante incendios, inundaciones, responsabilidad civil y asistencia de emergencias domésticas.',
-  },
-  {
-    title: 'Planes Combinados',
-    description:
-      'Unifica la protección de tu auto y hogar en un solo plan inteligente con descuentos por buen historial.',
-  },
+const sectors = [
+  { id: 1, name: 'Cheto / Pared Este', type: 'Sport climbing', walls: 8, routes: 31, maxHeight: '18m' },
+  { id: 2, name: 'Cañadón', type: 'Sport climbing', walls: 2, routes: 6, maxHeight: '15m' },
+  { id: 3, name: 'El Tablero', type: 'Sport climbing', walls: 18, routes: 187, maxHeight: '18m' },
+  { id: 4, name: 'El Derrumbe', type: 'Sport climbing', walls: 6, routes: 47, maxHeight: '26m' },
+  { id: 5, name: 'La Chanchería', type: 'Sport climbing', walls: 9, routes: 51, maxHeight: '18m' },
+  { id: 6, name: 'El Arco', type: 'Sport climbing', walls: 8, routes: 28, maxHeight: '15m' },
+  { id: 7, name: 'Croto', type: 'Sport climbing', walls: 5, routes: 22, maxHeight: '20m' },
 ];
 
 const highlights = [
   {
-    title: 'Pagos Mensuales al Pool',
+    title: 'Escuela y salidas guiadas',
     description:
-      'Cada asegurado aporta su prima mensual a un fondo común auto gestionado por contratos inteligentes auditables.',
+      'Inspirado en el estilo de sitios de escalada modernos, con foco en comunidad, progresión técnica y seguridad en roca.',
   },
   {
-    title: 'Smart Contract Transparente',
+    title: 'Información clara por sectores',
     description:
-      'El contrato administra aportaciones, registra siniestros y distribuye pagos automáticamente bajo reglas verificables.',
+      'Topos, cantidad de vías y altura máxima para que armes tu día según nivel y objetivos.',
   },
   {
-    title: 'Retiro Multicontrolado',
+    title: 'Experiencia outdoor completa',
     description:
-      'Tres propietarios autorizados deben aprobar cualquier retiro del pool para cubrir siniestros, garantizando gobernanza compartida.',
+      'Entrenamiento, escalada, ambiente de montaña y soporte para quienes quieren empezar o mejorar.',
   },
 ];
 
-const owners = [
-  { name: 'Ana Morales', role: 'Gestora de Riesgos', focus: 'Evalúa siniestros y autoriza pagos proporcionales.' },
-  { name: 'Luis Cabrera', role: 'Director Financiero', focus: 'Supervisa reservas y liquidez del pool.' },
-  { name: 'María Chen', role: 'Especialista en Smart Contracts', focus: 'Audita el contrato y ejecuta las solicitudes en cadena.' },
+const supporterBenefits = [
+  'Acceso a topos y reseñas premium en toda el área de Potrero Alto.',
+  'Historial de ascensos y tracking personal de proyectos.',
+  'Navegación sin anuncios y herramientas avanzadas de planificación.',
+  'Beneficios exclusivos con aliados de la comunidad escaladora.',
 ];
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100">
-      <header
-        className="relative overflow-hidden text-white"
-        style={{
-          backgroundImage:
-            "url('https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1800&q=80')",
-        }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-950/90 via-slate-900/85 to-emerald-900/70" />
-        <div className="relative mx-auto flex max-w-6xl flex-col items-center px-6 py-24 text-center sm:py-28">
-          <span className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/10 px-5 py-2 text-xs font-semibold uppercase tracking-[0.2em]">
-            Pool asegurador descentralizado
-          </span>
-          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
-            Protege autos y hogares con contratos inteligentes transparentes
-          </h1>
-          <p className="mt-6 max-w-3xl text-lg text-slate-200">
-            Tus aportes mensuales se integran en un fondo común auditable que maximiza liquidez, minimiza fraude y
-            asegura la gobernanza mediante la aprobación de tres owners para liberar pagos ante siniestros.
-          </p>
-          <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row">
-            <Link
-              href="/signup"
-              className="group inline-flex items-center justify-center rounded-full bg-gradient-to-r from-emerald-400 via-sky-500 to-blue-600 px-8 py-3 text-base font-semibold text-white shadow-lg shadow-emerald-500/30 transition hover:scale-[1.02] focus:outline-none focus-visible:ring-4 focus-visible:ring-emerald-300"
-            >
-              <span>Crear cuenta</span>
-              <svg
-                className="ml-3 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+    <main className="min-h-screen bg-stone-100 text-stone-800">
+      <header className="relative overflow-hidden bg-stone-900 text-white">
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage:
+              "url('https://images.unsplash.com/photo-1522163182402-834f871fd851?auto=format&fit=crop&w=2000&q=80')",
+            backgroundPosition: 'center',
+            backgroundSize: 'cover',
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-stone-950/90 via-stone-900/75 to-emerald-900/50" />
+
+        <nav className="relative mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-6">
+          <div>
+            <p className="text-xs uppercase tracking-[0.22em] text-emerald-300">Escalada · Argentina</p>
+            <p className="text-xl font-semibold">Potrero Alto</p>
+          </div>
+          <div className="hidden items-center gap-5 text-sm font-medium md:flex">
+            <a href="#sectores" className="transition hover:text-emerald-300">Sectores</a>
+            <a href="#beneficios" className="transition hover:text-emerald-300">Beneficios</a>
+            <Link href="/login" className="rounded-full border border-white/60 px-4 py-2 transition hover:bg-white/10">
+              Ingresar
+            </Link>
+          </div>
+        </nav>
+
+        <div className="relative mx-auto max-w-6xl px-6 pb-24 pt-8 sm:pb-28 sm:pt-12">
+          <div className="max-w-3xl">
+            <span className="inline-flex rounded-full border border-emerald-300/60 bg-emerald-400/15 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-200">
+              Crag Guide
+            </span>
+            <h1 className="mt-5 text-4xl font-bold leading-tight sm:text-5xl md:text-6xl">
+              Descubrí Potrero Alto, una experiencia de escalada auténtica
+            </h1>
+            <p className="mt-5 max-w-2xl text-base text-stone-200 sm:text-lg">
+              Web renovada en formato escuela/guía, con estilo limpio y outdoor: sectores, datos clave y beneficios
+              para la comunidad escaladora.
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Link
+                href="/events"
+                className="inline-flex items-center justify-center rounded-full bg-emerald-500 px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-500/30 transition hover:bg-emerald-400"
               >
-                <path d="M5 10h10m0 0-4-4m4 4-4 4" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </Link>
-            <Link
-              href="/dashboard"
-              className="inline-flex items-center justify-center rounded-full border border-white/60 px-8 py-3 text-base font-semibold text-white transition hover:border-emerald-300 hover:bg-white/10 focus:outline-none focus-visible:ring-4 focus-visible:ring-emerald-300/60"
-            >
-              Ver dashboard en vivo
-            </Link>
+                Ver sectores
+              </Link>
+              <Link
+                href="/signup"
+                className="inline-flex items-center justify-center rounded-full border border-white/70 bg-white/10 px-7 py-3 text-sm font-semibold text-white transition hover:bg-white/20"
+              >
+                Sumarme a la comunidad
+              </Link>
+            </div>
           </div>
         </div>
       </header>
 
-      <section className="relative mx-auto mt-16 max-w-6xl px-6">
-        <div className="absolute -inset-x-10 top-1/2 -z-10 h-72 -translate-y-1/2 rounded-3xl bg-gradient-to-r from-slate-800/60 via-slate-900/50 to-sky-900/60 blur-3xl" />
-        <h2 className="text-center text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-          ¿Cómo funciona el pool inteligente?
-        </h2>
-        <p className="mx-auto mt-4 max-w-2xl text-center text-sm text-slate-300 sm:text-base">
-          Cada aporte queda registrado en la cadena, permitiendo auditorías en tiempo real y liberaciones controladas de
-          capital en caso de siniestros.
-        </p>
-        <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
+      <section className="mx-auto max-w-6xl px-6 py-16">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {highlights.map(item => (
-            <article
-              key={item.title}
-              className="group relative overflow-hidden rounded-2xl border border-white/5 bg-slate-900/70 p-8 shadow-lg shadow-sky-900/40 backdrop-blur"
-            >
-              <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-gradient-to-br from-emerald-400/20 via-sky-500/10 to-blue-600/5 blur-2xl transition duration-300 group-hover:scale-125" />
-              <div className="relative">
-                <h3 className="text-xl font-semibold text-white">{item.title}</h3>
-                <p className="mt-3 text-sm text-slate-300">{item.description}</p>
-              </div>
+            <article key={item.title} className="rounded-2xl border border-stone-200 bg-white p-7 shadow-sm">
+              <h2 className="text-xl font-semibold text-stone-900">{item.title}</h2>
+              <p className="mt-3 text-sm leading-relaxed text-stone-600">{item.description}</p>
             </article>
           ))}
         </div>
       </section>
 
-      <section className="relative mt-24 bg-gradient-to-br from-emerald-500/15 via-sky-500/10 to-blue-600/10 py-20">
-        <div className="absolute inset-x-0 -top-10 -z-10 h-20 bg-gradient-to-b from-black/40 to-transparent" />
+      <section id="sectores" className="mx-auto max-w-6xl px-6 pb-20">
+        <div className="overflow-hidden rounded-3xl border border-stone-200 bg-white shadow-sm">
+          <div className="border-b border-stone-200 bg-stone-50 px-6 py-5 sm:px-8">
+            <h2 className="text-2xl font-semibold text-stone-900 sm:text-3xl">Subsectores de Potrero Alto</h2>
+            <p className="mt-2 text-sm text-stone-600">
+              Todos los sectores registrados como <strong>Sport climbing</strong>.
+            </p>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-left text-sm">
+              <thead className="bg-stone-900 text-stone-100">
+                <tr>
+                  <th className="px-6 py-4 sm:px-8">#</th>
+                  <th className="px-6 py-4 sm:px-8">Sector / Área</th>
+                  <th className="px-6 py-4 sm:px-8">Tipo</th>
+                  <th className="px-6 py-4 sm:px-8">Paredes</th>
+                  <th className="px-6 py-4 sm:px-8">Vías</th>
+                  <th className="px-6 py-4 sm:px-8">Altura máx.</th>
+                </tr>
+              </thead>
+              <tbody>
+                {sectors.map(sector => (
+                  <tr key={sector.id} className="border-t border-stone-100 hover:bg-emerald-50/60">
+                    <td className="px-6 py-4 sm:px-8">{sector.id}</td>
+                    <td className="px-6 py-4 font-medium sm:px-8">{sector.name}</td>
+                    <td className="px-6 py-4 sm:px-8">
+                      <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
+                        {sector.type}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 sm:px-8">{sector.walls}</td>
+                    <td className="px-6 py-4 sm:px-8">{sector.routes}</td>
+                    <td className="px-6 py-4 sm:px-8">{sector.maxHeight}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="beneficios" className="bg-stone-900 py-20 text-white">
         <div className="mx-auto max-w-6xl px-6">
-          <h2 className="text-center text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-            Planes de cobertura
-          </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-center text-sm text-slate-200 sm:text-base">
-            Diseñados para proteger cada aspecto de tu patrimonio con condiciones transparentes y liquidaciones ágiles.
-          </p>
-          <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-3">
-            {coverages.map(plan => (
-              <article
-                key={plan.title}
-                className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-8 text-white shadow-xl backdrop-blur"
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-emerald-300/10 to-sky-400/10 opacity-80" />
-                <div className="relative">
-                  <h3 className="text-xl font-semibold">{plan.title}</h3>
-                  <p className="mt-3 text-sm text-slate-100/80">{plan.description}</p>
-                </div>
-              </article>
-            ))}
+          <div className="grid grid-cols-1 items-start gap-10 md:grid-cols-2">
+            <div>
+              <h2 className="text-3xl font-semibold sm:text-4xl">Supporting theCrag is not only good for your Karma</h2>
+              <p className="mt-4 text-sm text-stone-300 sm:text-base">
+                It also gives you access to great benefits on theCrag and beyond.
+              </p>
+              <h3 className="mt-8 text-lg font-semibold text-emerald-300">Supporter Benefits</h3>
+            </div>
+            <ul className="grid gap-3 text-sm">
+              {supporterBenefits.map(benefit => (
+                <li key={benefit} className="rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-stone-100">
+                  {benefit}
+                </li>
+              ))}
+            </ul>
           </div>
-        </div>
-      </section>
 
-      <section className="relative mx-auto mt-24 max-w-6xl px-6 pb-24">
-        <div className="absolute inset-x-0 top-0 -z-10 h-full rounded-3xl border border-white/5 bg-slate-900/60 shadow-2xl shadow-emerald-900/40" />
-        <div className="relative rounded-3xl px-6 py-16 sm:px-10 md:px-16">
-          <h2 className="text-center text-3xl font-semibold tracking-tight text-white sm:text-4xl">Gobernanza del pool</h2>
-          <p className="mx-auto mt-4 max-w-3xl text-center text-sm text-slate-300 sm:text-base">
-            Los retiros requieren la aprobación conjunta de tres owners que vigilan riesgos, liquidez y ejecución técnica
-            del contrato. Cada movimiento queda registrado en la cadena para auditorías continuas y transparencia total.
-          </p>
-          <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-3">
-            {owners.map(owner => (
-              <article
-                key={owner.name}
-                className="rounded-2xl border border-white/10 bg-white/5 p-8 text-white shadow-lg shadow-emerald-900/30 backdrop-blur"
-              >
-                <h3 className="text-xl font-semibold">{owner.name}</h3>
-                <p className="mt-2 text-xs uppercase tracking-[0.35em] text-emerald-300/80">{owner.role}</p>
-                <p className="mt-4 text-sm text-slate-100/80">{owner.focus}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section
-        className="relative overflow-hidden bg-slate-950"
-        style={{
-          backgroundImage:
-            "url('https://images.unsplash.com/photo-1529429617124-aee711a67bb1?auto=format&fit=crop&w=1800&q=80')",
-        }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-950/95 via-slate-900/85 to-sky-900/75" />
-        <div className="relative mx-auto flex max-w-5xl flex-col items-center px-6 py-20 text-center text-white">
-          <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Protege hoy tu patrimonio</h2>
-          <p className="mt-4 max-w-3xl text-sm text-slate-200 sm:text-base">
-            Integra tus pólizas de auto y hogar en una plataforma descentralizada que da visibilidad total a tus fondos.
-            Configura aportaciones automáticas, monitorea reservas en tiempo real y responde a siniestros sin fricción.
-          </p>
-          <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row">
+          <div className="mt-10 flex flex-col gap-3 sm:flex-row">
             <Link
               href="/login"
-              className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-sky-500 to-blue-600 px-8 py-3 text-base font-semibold text-white shadow-lg shadow-sky-500/30 transition hover:scale-[1.02] focus:outline-none focus-visible:ring-4 focus-visible:ring-sky-300"
+              className="inline-flex items-center justify-center rounded-full bg-emerald-500 px-7 py-3 text-sm font-semibold text-white transition hover:bg-emerald-400"
             >
               Iniciar sesión
             </Link>
             <Link
-              href="/docs"
-              className="inline-flex items-center justify-center rounded-full border border-white/60 px-8 py-3 text-base font-semibold text-white transition hover:border-emerald-300 hover:bg-white/10 focus:outline-none focus-visible:ring-4 focus-visible:ring-emerald-300/60"
+              href="/signup"
+              className="inline-flex items-center justify-center rounded-full border border-white/60 px-7 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
             >
-              Ver whitepaper
+              Crear cuenta
             </Link>
           </div>
         </div>
