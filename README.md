@@ -1,30 +1,17 @@
 # EntraDa
 
-Simple Next.js app with authentication (signup, login, logout, password recovery) using Prisma and PostgreSQL. Everything is written in TypeScript and styled with Tailwind CSS.
+Simple Next.js app with authentication (signup, login, logout, password recovery) and event management. Everything is written in TypeScript and styled with Tailwind CSS.
 
 ## Scripts
 
 - `npm run dev` – start development server
 - `npm run build` – build application
 - `npm start` – start production server
+- `npm test` – run API/auth tests
 
-Set a `DATABASE_URL` environment variable pointing to your PostgreSQL instance before running Prisma commands.
+## Data model
 
-## Vercel + Neon setup
-
-To deploy on Vercel with a Neon PostgreSQL database, set the `DATABASE_URL` environment variable in your Vercel project to the following connection string:
-
-```
-postgresql://neondb_owner:YOUR_PASSWORD@ep-still-glade-acdx8v5z-pooler.sa-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
-```
-
-For local development, copy `.env.example` to `.env`:
-
-```
-cp .env.example .env
-```
-
-This ensures Prisma connects to the Neon instance both locally and in production.
+This project uses an in-memory store (`src/lib/store.ts`) for users, events, tickets, and ratings. Data is reset when the server restarts.
 
 ## Email sending
 
